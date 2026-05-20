@@ -1,4 +1,20 @@
-import type { SiteConfig, BrandStoryChapter } from "@core/web/types"
+// Inline types — no @core/web dependency needed in old-format repos
+type Business = {
+  name: string; tagline: string; phone: string; phoneHref: string;
+  email: string; address: string; city: string; serviceAreas: string[];
+  license: string; since: string; google_rating: string; review_count: string;
+  emergency: boolean; social: { google: string; yelp: string; facebook: string };
+  theme: string; niche: string;
+}
+type ServiceItem = { icon: string; title: string; desc: string; urgent: boolean }
+type Testimonial = { name: string; location: string; stars: number; text: string }
+type Stat = { value: string; label: string }
+type Reason = { icon: string; title: string; desc: string }
+type BrandStoryChapter = { index: string; label: string; headline: string; body: string; bg: string; fg: string }
+type SiteConfig = {
+  business: Business; services: ServiceItem[]; testimonials: Testimonial[];
+  trustBadges: string[]; stats: Stat[]; reasons: Reason[];
+}
 
 export const config: SiteConfig & { brandStoryChapters: BrandStoryChapter[] } = {
   business: {
@@ -35,7 +51,7 @@ export const config: SiteConfig & { brandStoryChapters: BrandStoryChapter[] } = 
 
   testimonials: [
     { name: "Sarah L.", location: "Pleasanton, CA", stars: 5, text: "AC went out on the hottest day of the year. Jazz responded in under an hour—fixed by lunchtime. Professional and fair priced." },
-    { name: "David R.", location: "Dublin, CA",      stars: 5, text: "Had a persistent leak other plumbers couldn't fix. Jazz found it immediately and the repair has held up perfectly." },
+    { name: "David R.", location: "Dublin, CA",      stars: 5, text: "Had a persistent leak other plumbers could not fix. Jazz found it immediately and the repair has held up perfectly." },
     { name: "Emily P.", location: "Livermore, CA",   stars: 5, text: "New furnace installation from quote to finish was smooth and stress-free. Team was knowledgeable and finished ahead of schedule." },
   ],
 
@@ -93,5 +109,6 @@ export const config: SiteConfig & { brandStoryChapters: BrandStoryChapter[] } = 
 // Backward compatibility exports for old-format template components
 export const BUSINESS = config.business
 export const SERVICES = config.services
-export const TESTIMONIALS = config.testimonials.map(t => ({ ...t, rating: t.stars }))
+export const TESTIMONIALS = config.testimonials.map((t: Testimonial) => ({ ...t, rating: t.stars }))
 export const TRUST_BADGES = config.trustBadges
+
