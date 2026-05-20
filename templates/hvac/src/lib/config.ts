@@ -89,3 +89,9 @@ export const config: SiteConfig & { brandStoryChapters: BrandStoryChapter[] } = 
     },
   ],
 }
+
+// Backward compatibility exports for old-format template components
+export const BUSINESS = config.business
+export const SERVICES = config.services
+export const TESTIMONIALS = config.testimonials.map(t => ({ ...t, rating: t.stars }))
+export const TRUST_BADGES = config.trustBadges
