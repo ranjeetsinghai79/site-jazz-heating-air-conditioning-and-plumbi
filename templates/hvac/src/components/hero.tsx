@@ -44,6 +44,7 @@ function useParticles(ref: React.RefObject<HTMLCanvasElement | null>) {
 // Photo card — shimmer while loading, fade in on load, subtle scale on hover
 function PhotoCard({ src, delay, tall }: { src: string; delay: number; tall?: boolean }) {
   const cardRef = useRef<HTMLDivElement>(null)
+  const imgRef  = useRef<HTMLImageElement>(null)
   const [loaded, setLoaded] = useState(false)
 
   useEffect(() => {
@@ -51,6 +52,11 @@ function PhotoCard({ src, delay, tall }: { src: string; delay: number; tall?: bo
     if (!card) return
     gsap.from(card, { opacity: 0, y: 30, duration: 0.65, ease: EASE, delay })
   }, [delay])
+
+  // Images cached before React hydrates never fire onLoad — check complete on mount
+  useEffect(() => {
+    if (imgRef.current?.complete) setLoaded(true)
+  }, [])
 
   return (
     <div
@@ -75,6 +81,7 @@ function PhotoCard({ src, delay, tall }: { src: string; delay: number; tall?: bo
         />
       )}
       <img
+        ref={imgRef}
         src={src}
         alt=""
         className="absolute inset-0 w-full h-full object-cover transition-all duration-500 group-hover:scale-105"
